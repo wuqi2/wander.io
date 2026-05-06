@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wander Web Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <div id="pageTransition" class="page-transition" aria-hidden="true">
+        <div class="page-transition__sheet">
+          <div class="page-transition__inner"></div>
+        </div>
+      </div>
+
+      <main id="homeScreen" class="screen screen--active">
+        <section class="desk-header">
+          <div>
+            <p class="eyebrow" id="greetingText">下午好，慢慢看一会儿</p>
+            <h1 class="hero-title">Wander</h1>
+            <p class="hero-sub" id="dateText"></p>
+          </div>
+          <img class="hero-logo" src="./assets/logo.png" alt="Wander 图标" />
+        </section>
+
+        <section class="status-strip">
+          <span class="status-strip__label">今天的纸签</span>
+          <p id="sessionNote">今天还没给眼睛调焦</p>
+        </section>
+
+        <section class="paper-stack">
+          <article id="homeFocusPaper" class="paper-card paper-card--focus">
+            <div class="paper-card__meta">
+              <span>01 · focus</span>
+              <span id="focusEyebrow">今天的眼睛</span>
+            </div>
+            <h2 class="paper-card__title">调焦</h2>
+            <div id="focusCarryNote" class="carry-note hidden"></div>
+            <p id="focusCopy" class="paper-card__copy">挑 1 到 3 张今天想带出去的纸条。</p>
+            <button id="focusAction" class="paper-card__cta" type="button">挑几张纸条</button>
+          </article>
+
+          <article id="homeDevelopPaper" class="paper-card paper-card--develop">
+            <div class="paper-card__meta">
+              <span>02 · develop</span>
+              <span id="developEyebrow">把瞬间慢慢留下来</span>
+            </div>
+            <h2 class="paper-card__title">显影</h2>
+            <p id="developCopy" class="paper-card__copy">回来以后，把今天的几张慢慢放进一页里。</p>
+            <button id="developAction" class="paper-card__cta paper-card__cta--ghost" type="button">走进暗房</button>
+          </article>
+        </section>
+
+        <section id="recentSection" class="recents hidden">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">on the desk</p>
+              <h3>留下来的几页散步</h3>
+            </div>
+          </div>
+          <div id="recentList" class="recent-list"></div>
+        </section>
+
+        <section id="emptyDesk" class="empty-desk">
+          <p>桌面还很空。</p>
+          <p class="muted">挑一张纸条，带它出去走一段。</p>
+        </section>
+      </main>
+
+      <main id="focusScreen" class="screen">
+        <section class="screen-head">
+          <button class="back-button" data-back="home" type="button">←</button>
+          <div>
+            <p class="eyebrow">focus · 调焦</p>
+            <h2 id="focusHeadTitle">今天想去哪儿走走？</h2>
+            <p id="focusHeadSub" class="screen-head__sub">写下来，我替你把那张纸打开。</p>
+          </div>
+        </section>
+
+        <section id="focusDesk" class="focus-desk">
+          <div class="window-backdrop">
+            <div class="window-backdrop__light"></div>
+            <div id="focusLeavesLeft" class="window-backdrop__leaf window-backdrop__leaf--left"></div>
+            <div id="focusLeavesRight" class="window-backdrop__leaf window-backdrop__leaf--right"></div>
+            <div class="window-backdrop__bar"></div>
+            <div class="window-backdrop__pillar"></div>
+          </div>
+
+          <article id="focusPaper" class="focus-paper is-entering">
+            <div id="focusClosed" class="focus-paper__closed">
+              <p class="focus-paper__hint">写一片你今天想去走走的地方</p>
+              <input id="focusAddress" class="focus-paper__input" placeholder="比如 武康路 / 你家门口 / 校园里" />
+              <div class="focus-paper__line"></div>
+              <button id="openTasksBtn" class="primary-button" type="button">把这片写进纸里</button>
+              <button id="openGenericBtn" class="text-button" type="button">不写也可以，给我一片普通街区</button>
+            </div>
+
+            <div id="focusOpen" class="focus-paper__open hidden">
+              <div class="focus-locale">
+                <span>·</span>
+                <span id="focusLocaleText">今天没指定地方，先从普通街区开始</span>
+                <button id="resetLocaleBtn" class="text-link" type="button">换一片</button>
+              </div>
+              <div id="taskList" class="task-list"></div>
+            </div>
+          </article>
+
+          <div id="focusBottomAction" class="focus-bottom-action hidden">
+            <p id="selectedTasksSummary" class="focus-bottom-action__summary"></p>
+            <button id="confirmFocusBtn" class="primary-button" type="button">把这些折好，带出门</button>
+          </div>
+
+          <div id="planeLayer" class="plane-layer" aria-hidden="true"></div>
+          <div class="window-frame-overlay">
+            <div class="window-frame-overlay__bar"></div>
+            <div class="window-frame-overlay__pillar"></div>
+          </div>
+        </section>
+      </main>
+
+      <main id="developScreen" class="screen">
+        <section class="screen-head">
+          <button class="back-button" data-back="home" type="button">←</button>
+          <div>
+            <p class="eyebrow">develop · 显影</p>
+            <h2>把今天的几张慢慢显出来</h2>
+            <p id="developPageSub" class="screen-head__sub">没有调焦也可以显影今天。</p>
+          </div>
+        </section>
+
+        <section id="developCarryNote" class="carry-sheet hidden"></section>
+
+        <section class="journal-sheet">
+          <div class="journal-sheet__head">
+            <p class="eyebrow">today</p>
+            <h3>放在这里的几张</h3>
+            <span id="photoCountText">0 / 9</span>
+          </div>
+
+          <label class="photo-dropzone" for="photoInput">
+            <input id="photoInput" type="file" accept="image/*" multiple hidden />
+            <span>把今天带回来的照片放进来</span>
+          </label>
+
+          <div id="photoGrid" class="photo-grid"></div>
+          <p class="journal-sheet__foot">默认保留原图。如果你愿意，我会试着把这些照片和刚才带出去的看法轻轻放在一起。</p>
+        </section>
+
+        <div class="action-group">
+          <button id="generateDraftBtn" class="primary-button" type="button">我试着帮你看见它</button>
+          <button id="skipAiBtn" class="secondary-button" type="button">先按原图整理</button>
+        </div>
+
+        <div id="loadingOverlay" class="loading-overlay hidden">
+          <div class="loading-overlay__tray"></div>
+          <p id="loadingText">正在显影…</p>
+          <p id="loadingSub" class="muted">请稍等一会儿</p>
+        </div>
+      </main>
+
+      <main id="summaryScreen" class="screen">
+        <section class="screen-head">
+          <button class="back-button" data-back="home" type="button">←</button>
+          <div>
+            <p class="eyebrow" id="summaryDateText"></p>
+            <h2>今天的眼睛，留下来了</h2>
+            <p id="summaryLocationText" class="screen-head__sub hidden"></p>
+          </div>
+        </section>
+
+        <section id="summaryTaskCard" class="summary-card hidden"></section>
+
+        <section class="summary-stage">
+          <div class="summary-stage__switch">
+            <button id="showPhotoModeBtn" class="switch-pill switch-pill--active" type="button">原图版</button>
+            <button id="showSketchModeBtn" class="switch-pill" type="button">手绘版</button>
+          </div>
+          <div class="summary-stage__frame">
+            <img id="summaryMainImage" alt="当前照片" />
+            <div id="summarySketchOverlay" class="summary-stage__sketch"></div>
+          </div>
+          <div id="summaryCounter" class="muted center-text"></div>
+          <div id="thumbRow" class="thumb-row"></div>
+        </section>
+
+        <section class="summary-card">
+          <p class="eyebrow">AI 看见</p>
+          <p id="readingText" class="summary-card__body"></p>
+        </section>
+
+        <section class="summary-card">
+          <p class="eyebrow">留一句给自己</p>
+          <p id="questionText" class="summary-card__body"></p>
+          <textarea id="reflectionInput" class="summary-textarea" maxlength="80" placeholder="可以写一句，也可以留白"></textarea>
+        </section>
+
+        <section class="summary-card">
+          <p class="eyebrow">一句日记</p>
+          <p id="summaryText" class="summary-card__body"></p>
+        </section>
+
+        <section class="summary-card">
+          <p class="eyebrow">显影成手绘版</p>
+          <p class="summary-card__body">Web Demo 版会用纸纹和色调模拟一层手绘记忆，方便你先完整体验产品节奏。</p>
+          <button id="sketchBtn" class="secondary-button" type="button">显影成手绘版</button>
+        </section>
+
+        <div class="action-group action-group--summary">
+          <button id="saveDiaryBtn" class="primary-button" type="button">保存这段散步</button>
+          <button id="backHomeBtn" class="secondary-button" type="button">回到桌面</button>
+        </div>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
